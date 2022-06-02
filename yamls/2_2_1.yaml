@@ -1,0 +1,52 @@
+name: first
+source code: |
+  input: '02'
+  blank: ' '
+  start state: newstart
+  table:
+    newstart:
+      0: L
+      ' ': {write: 's', R: start}
+    start:
+      0: {write: 'a', R: q0}
+      a: R
+      [b, c, 1, 2]: {R: bad}
+      ' ': {write: 'T', L: end}
+    q0:
+      0: R
+      1: {write: 'b', R: q1}
+      b: R
+      [a, c, 2]: {R: bad}
+      ' ': {write: 'F', L: end}
+    q1:
+      1: R
+      2: {write: 'c', R: q2}
+      c: R
+      [a, b, 0]: {R: bad}
+      ' ': {write: 'F', L: end}
+    q2:
+      [0, 1, 2, 'a', 'b', 'c']: L
+      s: {R: start}
+      ' ': {L: rerun}
+    rerun:
+      [a, b, c]: L
+      [0, 1, 2]: {R: bad}
+      s: {R: good}
+    bad:
+      [0, 1, 2, 'a', 'b', 'c']: R
+      ' ': {write: 'F', L: end}
+    good:
+      [0, 1, 2, 'a', 'b', 'c']: R
+      ' ': {write: 'T', L: end}
+    end:
+      
+positions:
+  newstart: {x: 594.4, y: 171.75, fixed: false}
+  start: {x: 517.88, y: 294.41}
+  q0: {x: 462.76, y: 402.7, fixed: false}
+  q1: {x: 338.29, y: 421.09, fixed: false}
+  q2: {x: 235.61, y: 327.43}
+  rerun: {x: 262.63, y: 185.16, fixed: false}
+  bad: {x: 347.42, y: 306.64, fixed: false}
+  good: {x: 382.33, y: 104.53, fixed: false}
+  end: {x: 417.51, y: 249.08, fixed: false}

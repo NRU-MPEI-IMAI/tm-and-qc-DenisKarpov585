@@ -1,0 +1,43 @@
+name: '2_2_3'
+source code: |-
+  input: 'λ110 01 11λ'
+  blank: ' '
+  start state: start
+  table:
+    start:
+      0: {write: 'a', R: q0}
+      1: {write: 'b', R: q0}
+      ['a', 'b', 'λ']: R
+      ' ': {write: '+', L: end}
+      
+    # один раз заменяем за проход
+    q0:
+      [0, 1, 'a','b']: R
+      'λ': {write: 'λ', L: q1} # разворачиваемся
+      ' ': {write: ' ', R: start}
+        
+    q1:
+      ['a','b', ' ']: L
+      0: {write: 'a', L: q2}
+      1: {write: 'b', L: q2}
+      'λ': {write: 'λ', R: q2}
+    
+    q2:
+      [0, 1, 'a','b']: L
+      ' ': {write: ' ', L: q1}
+      'λ': {write: 'λ', R: start}
+    
+    end:
+      ['y','λ']: L
+      'a': {write: '0', L}
+      'b': {write: '1', L}
+      ' ': {write: ' ', R: done}
+      
+    done:
+positions:
+  start: {x: 429.19, y: 238.66, fixed: false}
+  q0: {x: 293.77, y: 235.84, fixed: false}
+  q1: {x: 424.72, y: 143.17, fixed: false}
+  q2: {x: 291.46, y: 163.53, fixed: false}
+  end: {x: 398.09, y: 380.31, fixed: false}
+  done: {x: 536.8, y: 345.85, fixed: false}

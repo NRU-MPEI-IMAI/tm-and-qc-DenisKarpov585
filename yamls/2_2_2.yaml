@@ -1,0 +1,65 @@
+name: '2_2_2'
+source code: |-
+  input: '([{}])'
+  blank: ' '
+  start state: start
+  table:
+    start:
+      ' ': {L: ok}    # пустая скобочная послед
+      ['(', '[', '{']: {R: find-closed}
+      [')', ']', '}']: {L: not-ok}
+      
+    find-closed:
+      ' ': {L: empty-or-ok}    # вышли за граицы слова или не нашли закрывающуюся скобку
+      ['(', '[', '{', 'x']: R
+      ')': {write: 'x', L: closed_1}
+      ']': {write: 'x', L: closed_2}
+      '}': {write: 'x', L: closed_3}
+    
+    closed_1:
+      ' ': {R: not-ok}
+      '(': {write: 'x', R:  find-closed}
+      ['[', '{']: {L: not-ok}
+      'x': L
+    
+    closed_2:
+      ' ': {R: not-ok}
+      '[': {write: 'x', R: find-closed}
+      ['(', '{']: {L: not-ok}
+      'x': L
+    
+    closed_3:
+      ' ': {R: not-ok}
+      '{': {write: 'x', R: find-closed}
+      ['[', '(']: {L: not-ok}
+      'x': L 
+      
+    empty-or-ok:
+      ['(', '[', '{']: {L: not-ok} # всё-таки есть необработанная скобка
+      'x': L
+      ' ': {R: ok}
+      
+    not-ok:
+      ['(', ')', '[', ']', '{', '}', 'x']: {write: ' ', R}
+      ' ': {R: go-start}
+    # в начало, чтобы очистить ленту
+    go-start:
+      ['(', ')', '[', ']', '{', '}', 'x']: {write: ' ', R: go-start}
+      ' ': {write: 0, L: done}
+      
+    ok:
+      ' ': {write: 1, L: done}
+      'x': {write: ' ', R}
+    
+    done:
+positions:
+  start: {x: 494.21, y: 296.8, fixed: false}
+  find-closed: {x: 386.97, y: 373.99, fixed: false}
+  closed_1: {x: 468.73, y: 259.51, fixed: false}
+  closed_2: {x: 237.62, y: 378.61, fixed: false}
+  closed_3: {x: 263.85, y: 431.38, fixed: false}
+  empty-or-ok: {x: 433.66, y: 218.49, fixed: false}
+  not-ok: {x: 324.97, y: 284.8, fixed: false}
+  go-start: {x: 292.95, y: 138.07, fixed: false}
+  ok: {x: 565.61, y: 161.38, fixed: false}
+  done: {x: 434.98, y: 83.33, fixed: false}
